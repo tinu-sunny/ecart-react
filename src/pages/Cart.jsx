@@ -7,25 +7,15 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function Cart() {
-  // Temporary cart data (later connect to Context / Redux / Backend)
-  const [cart, setCart] = useState([
-    // {
-    //   id: 1,
-    //   title: "iPhone 14",
-    //   price: 799,
-    //   quantity: 1,
-    //   thumbnail: "https://fdn.gsmarena.com/imgroot/reviews/22/apple-iphone-14-pro/lifestyle/-1200w5/gsmarena_001.jpg",
-    // },
-    // {
-    //   id: 2,
-    //   title: "MacBook Pro",
-    //   price: 1299,
-    //   quantity: 2,
-    //   thumbnail: "https://images.expertreviews.co.uk/wp-content/uploads/2023/02/apple_macbook_pro_16in_m2_pro_2023_review_10.jpg",
-    // },
-  ]);
+
+
+ const cart=useSelector((state)=>state.cart.items)
+ console.log(cart);
+ 
+
 
  
 
@@ -59,7 +49,7 @@ function Cart() {
                           <p className="fw-bold mb-0">₹ {item.price}</p>
                         </Col>
 
-                        <Col md={3} className="d-flex align-items-center gap-2">
+                        {/* <Col md={3} className="d-flex align-items-center gap-2">
                           <Button
                             size="sm"
                             variant="outline-dark"
@@ -79,15 +69,15 @@ function Cart() {
                           >
                             <FaPlus />
                           </Button>
-                        </Col>
+                        </Col> */}
 
-                        <Col md={2}>
+                        {/* <Col md={2}>
                           <p className="fw-bold mb-0">
                             ₹ {item.price * item.quantity}
                           </p>
-                        </Col>
+                        </Col> */}
 
-                        <Col md={2} className="text-end">
+                        <Col md={6} className="text-end">
                           <Button
                             variant="outline-danger"
                           

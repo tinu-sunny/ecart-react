@@ -7,25 +7,14 @@ import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { FaHeart, FaTrash } from "react-icons/fa";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 
 function Wishlist() {
   // Temporary wishlist data (later connect to Context / Redux / Backend)
-  const [wishlist, setWishlist] = useState([
-    // {
-    //   id: 1,
-    //   title: "iPhone 14",
-    //   price: 799,
-    //   thumbnail: "https://fdn.gsmarena.com/imgroot/reviews/22/apple-iphone-14-pro/lifestyle/-1200w5/gsmarena_001.jpg",
-    //   rating: 4.8,
-    // },
-    // {
-    //   id: 2,
-    //   title: "MacBook Pro",
-    //   price: 1299,
-    //   thumbnail: "https://images.expertreviews.co.uk/wp-content/uploads/2023/02/apple_macbook_pro_16in_m2_pro_2023_review_10.jpg",
-    //   rating: 4.7,
-    // },
-  ]);
+ const wishlist=useSelector((state)=>state.Wishlist.items)
+ console.log(wishlist);
+ 
+
 
 
   return (

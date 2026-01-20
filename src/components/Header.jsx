@@ -4,8 +4,12 @@ import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import { Link, NavLink } from "react-router-dom";
 import { FaHeart, FaShoppingCart } from "react-icons/fa";
+import { useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function Header() {
+const data=useSelector((state)=>state.cart.items)
+
   return (
     <Navbar expand="lg" bg="light" variant="light" sticky="top" className="shadow-sm">
       <Container>
@@ -38,7 +42,7 @@ export default function Header() {
             <Nav.Link as={NavLink} to="/cart" className="position-relative">
               <FaShoppingCart size={20} />
               <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                2
+             {Array.isArray(data) ? data.length : 0}
               </span>
             </Nav.Link>
 

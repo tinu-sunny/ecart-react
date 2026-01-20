@@ -7,12 +7,19 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
 import { Card, Button, Spinner } from "react-bootstrap";
+import { addwishlist } from "../redux/slices/wishlistSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addtocart } from "../redux/slices/cartSlice";
 
 function ViewProduct() {
   const { id } = useParams();
 const [liked ,SetLiked ]=useState(false)
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+
+ const dispatch = useDispatch()
+const data=useSelector((state)=>state.Wishlist.items)
+console.log(data);
 
   const baseurl = `https://dummyjson.com/products/${id}`;
 
@@ -69,11 +76,12 @@ const [liked ,SetLiked ]=useState(false)
 
       {/* Wishlist */}
       <span
-        onClick={() => SetLiked(!liked)}
+         onClick={()=>dispatch(addwishlist(product))
+          }
         style={{ cursor: "pointer" }}
         title="Add to Wishlist"
       >
-        {liked ? (
+        {data && data.find(item=>item.id ===product.id) ? (
           <FaHeart className="text-danger" size={20} />
         ) : (
           <FaRegHeart size={20} />
@@ -83,10 +91,12 @@ const [liked ,SetLiked ]=useState(false)
     </div>
 
                 <div className="d-flex gap-3 mt-4">
-                  <Button variant="outline-dark">
+                  <Button variant="outline-dark"  onClick={()=>dispatch(addwishlist(product))
+          }>
                     Add to Wishlist
                   </Button>
-                  <Button variant="dark">
+                  <Button variant="dark" onClick={()=>dispatch(addtocart(product))
+}>
                     Add to Cart
                   </Button>
                 </div>
