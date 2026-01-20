@@ -1,117 +1,133 @@
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Header from '../components/Header'
-import Footer from '../components/Footer';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import Prouduct from './Prouduct';
-import { FaStar } from "react-icons/fa";
-import { Card } from 'react-bootstrap';
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
+import { Card, Button, Spinner } from "react-bootstrap";
 
+function ViewProduct() {
+  const { id } = useParams();
+const [liked ,SetLiked ]=useState(false)
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-function ViewProuduct() {
+  const baseurl = `https://dummyjson.com/products/${id}`;
 
+  const getData = async () => {
+    try {
+      const response = await fetch(baseurl);
+      const productData = await response.json();
+      setProduct(productData);
+    } catch (error) {
+      console.error("Error fetching product:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-   const [products,setProducts]=useState([])
-   console.log(products);
-   
-const {id}= useParams()
-// console.log(id);
-
-const baseurl = `https://dummyjson.com/products/${id}`
-
-const  getData= async ()=>{
-   const response = await fetch(baseurl)
-     const productData = await response.json()
-    //  console.log(productData);
-     setProducts(productData)
-     
-  
-}
-useEffect(()=>{
-  getData()
-},[])
-
+  useEffect(() => {
+    getData();
+  }, [id]);
 
   return (
-
-
     <>
+      <Header />
 
-    <Header/>
+      {/* Product Details */}
+      <div className="bg-light py-5">
+        <Container>
+          {loading ? (
+            <div className="text-center my-5">
+              <Spinner animation="border" />
+            </div>
+          ) : (
+            <Row className="align-items-center">
+              <Col md={6} className="text-center">
+                <img
+                  src={product.thumbnail}
+                  alt={product.title}
+                  className="img-fluid rounded"
+                  style={{ maxHeight: "450px", objectFit: "cover" }}
+                />
+              </Col>
 
-    <div className='bg-info p-5'>
-       <div className='mt-5'>
-          <Container>
-      {
+              <Col md={6}>
+                <h2 className="mb-3">{product.title}</h2>
+                <p className="text-muted">{product.description}</p>
+
+                <h4 className="fw-bold mb-2">$ {product.price}</h4>
+
+            <div className="d-flex align-items-center justify-content-between mt-2">
       
-            <Row>
-          <Col>
-          <img src={products.thumbnail} alt="product" width={'500px'} height={'500px'} />
-          </Col>
-          <Col>
-        <div className='p-5'>
-            <h3 className='text-center'>{products.title}</h3>
-            <p>{products.description}</p>
-            <p>$ {products.price}</p>
-            <p> <FaStar /> {products.rating}</p>
+      {/* Rating */}
+      <p className="text-warning mb-0">
+        <FaStar /> {product.rating}
+      </p>
 
-     <button className='btn btn-dark m-4'>Add To Wishlist</button>        
-     <button className='btn btn-dark m-4'>Add To Cart</button> 
+      {/* Wishlist */}
+      <span
+        onClick={() => SetLiked(!liked)}
+        style={{ cursor: "pointer" }}
+        title="Add to Wishlist"
+      >
+        {liked ? (
+          <FaHeart className="text-danger" size={20} />
+        ) : (
+          <FaRegHeart size={20} />
+        )}
+      </span>
 
-
-     <p></p>
-        </div>       
-               </Col>
-        </Row>
-      
-      }
-      </Container>
-
-
-     
-       </div>
     </div>
 
-     <div>
-         <h1 className='text-center m-5'> User Reviews</h1>
-
-         <Container>
-          <Row>
-
-            {/* reviews */}
-      {
-        products?.reviews?.map((item,index)=>(
-            <Col key={index}>
-              <Card className='p-2'>
-                
-               <p className='m-3 text-center'>
-                  <Card.Text>
-                  {item.comment}
-                  </Card.Text>
-                     <Card.Text>
-                  ~ {item.reviewerName}~
-                  </Card.Text>
-                  
-                  <Card.Text>
-                    <FaStar />  {item.rating}
-                  </Card.Text>
-  
-               </p>
-               
-              </Card>
-        </Col>
-
-        ))
-      }
-        
-          </Row>
-         </Container>
+                <div className="d-flex gap-3 mt-4">
+                  <Button variant="outline-dark">
+                    Add to Wishlist
+                  </Button>
+                  <Button variant="dark">
+                    Add to Cart
+                  </Button>
+                </div>
+              </Col>
+            </Row>
+          )}
+        </Container>
       </div>
-<Footer/>
+
+      {/* Reviews Section */}
+      <Container className="my-5">
+        <h3 className="text-center mb-4">User Reviews</h3>
+
+        <Row>
+          {product?.reviews?.length > 0 ? (
+            product.reviews.map((item, index) => (
+              <Col md={4} className="mb-4" key={index}>
+                <Card className="h-100 shadow-sm">
+                  <Card.Body className="text-center">
+                    <Card.Text>"{item.comment}"</Card.Text>
+                    <Card.Text className="fw-semibold">
+                      ~ {item.reviewerName}
+                    </Card.Text>
+                    <Card.Text className="text-warning">
+                      <FaStar /> {item.rating}
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+          ) : (
+            <p className="text-center text-muted">
+              No reviews available
+            </p>
+          )}
+        </Row>
+      </Container>
+
+      <Footer />
     </>
-  )
+  );
 }
 
-export default ViewProuduct
+export default ViewProduct;

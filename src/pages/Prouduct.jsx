@@ -1,83 +1,99 @@
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { FaStar, FaRupeeSign } from "react-icons/fa";
+import Spinner from "react-bootstrap/Spinner";
 
-import Header from '../components/Header'
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import { Link } from 'react-router-dom';
-import ViewProuduct from './ViewProuduct';
-import Footer from '../components/Footer';
-import { FaStar } from "react-icons/fa";
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import { useEffect, useState } from 'react';
-import { FaRupeeSign } from "react-icons/fa";
-function Prouduct() {
+function Product() {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  const baseurl = "https://dummyjson.com/products";
 
-  const [products,setProducts]=useState([])
-  
-     console.log(products);
+  const getData = async () => {
+    try {
+      const response = await fetch(baseurl);
+      const productData = await response.json();
+      setProducts(productData.products);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  const baseurl = 'https://dummyjson.com/products'
-
-  const getData = async ()=>{
-     const response = await fetch(baseurl)
-     const productData = await response.json()
-    //  console.log(productData.products);
-     setProducts(productData.products)
-     
-       
-  }
-
-  useEffect(()=>{
-    getData()
-  },[])
+  useEffect(() => {
+    getData();
+  }, []);
 
   return (
-  <>
-        <Header/>
-        
-<div className='bg-info p-4 '>
-  
-          <div className=' text-center'>
-            <h2 className='m-5'>All Products</h2>
-          </div>
-          <div>
-  
-               <Container>
-        <Row>
-       
-       {
-        products.length>0? products.map((item,index)=>(
-             <Col key={index} className='m-4'> 
-        <Link  to={`/viewprouduct/${item.id}`} element={<ViewProuduct/>} className="text-decoration-none">
-          <Card style={{ width: '18rem' }}  >
-        <Card.Img variant="top" src={item.thumbnail} height={'200px'} />
-        <Card.Body>
-          <Card.Title >{item.title}</Card.Title>
-          <Card.Text>
-          <FaRupeeSign />{item.price}
-          </Card.Text>
+    <>
+      <Header />
 
-          <Card.Text> <FaStar /> {item.rating}</Card.Text>
-             <Button variant="primary">View</Button>
-   
-        </Card.Body>
-      </Card></Link>
-      </Col>
-        )):"empty"
-       }
+      <div className="bg-light py-5">
+        <Container>
+          <h2 className="text-center mb-5">All Products</h2>
 
-        </Row>
-      </Container>
-  
-     
-          </div>
-</div>
+          {loading ? (
+            <div className="text-center">
+              <Spinner animation="border" />
+            </div>
+          ) : (
+            <Row>
+              {products.length > 0 ? (
+                products.map((item) => (
+                  <Col key={item.id} md={4} lg={3} className="mb-4">
+                    <Link
+                      to={`/viewprouduct/${item.id}`}
+                      className="text-decoration-none text-dark"
+                    >
+                      <Card className="h-100 shadow-sm product-card">
+                        <Card.Img
+                          variant="top"
+                          src={item.thumbnail}
+                          style={{ height: "200px", objectFit: "cover" }}
+                        />
 
-        <Footer/>
-  </>
-  )
+                        <Card.Body className="d-flex flex-column">
+                          <Card.Title className="fs-6">
+                            {item.title}
+                          </Card.Title>
+
+                          <Card.Text className="fw-bold mt-2">
+                            <FaRupeeSign /> {item.price}
+                          </Card.Text>
+
+                          <Card.Text className="text-warning">
+                            <FaStar /> {item.rating}
+                          </Card.Text>
+
+                          <Button variant="dark" className="mt-auto">
+                            View Product
+                          </Button>
+                        </Card.Body>
+                      </Card>
+                    </Link>
+                  </Col>
+                ))
+              ) : (
+                <p className="text-center text-muted">
+                  No products available
+                </p>
+              )}
+            </Row>
+          )}
+        </Container>
+      </div>
+
+      <Footer />
+    </>
+  );
 }
 
-export default Prouduct
+export default Product;
