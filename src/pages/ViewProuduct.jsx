@@ -3,9 +3,9 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { FaHeart, FaRegHeart, FaStar } from "react-icons/fa";
+import { FaHeart, FaMinus, FaPlus, FaRegHeart, FaStar } from "react-icons/fa";
 import { Card, Button, Spinner } from "react-bootstrap";
 import { addwishlist } from "../redux/slices/wishlistSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,8 +18,15 @@ const [liked ,SetLiked ]=useState(false)
   const [loading, setLoading] = useState(true);
 
  const dispatch = useDispatch()
-const data=useSelector((state)=>state.Wishlist.items)
-console.log(data);
+const wishlistarray=useSelector((state)=>state.Wishlist.items)
+const cartarray = useSelector((state)=>state.cart.items)
+// console.log(data);
+const [wishlistData,setWishlistData]=useState([])
+const [cartData,setCartData]= useState([])
+useEffect(()=>{
+  setWishlistData(wishlistarray);
+  setCartData(cartarray)
+},[wishlistarray,cartarray])
 
   const baseurl = `https://dummyjson.com/products/${id}`;
 
@@ -39,6 +46,9 @@ console.log(data);
     getData();
   }, [id]);
 
+  console.log(wishlistData);
+  console.log(cartData);
+  
   return (
     <>
       <Header />
@@ -81,7 +91,7 @@ console.log(data);
         style={{ cursor: "pointer" }}
         title="Add to Wishlist"
       >
-        {data && data.find(item=>item.id ===product.id) ? (
+        {wishlistData && wishlistData.find(item=>item.id ===product.id) ? (
           <FaHeart className="text-danger" size={20} />
         ) : (
           <FaRegHeart size={20} />
@@ -95,10 +105,11 @@ console.log(data);
           }>
                     Add to Wishlist
                   </Button>
-                  <Button variant="dark" onClick={()=>dispatch(addtocart(product))
-}>
+                  {cartData && cartData.find(item=>item.id==product.id)?  <Link to={'/cart'}><Button variant="info"  onClick={()=>dispatch(addtocart(product))}>View Cart</Button> </Link>  :
+                        <Button variant="dark" onClick={()=>dispatch(addtocart(product))}>
                     Add to Cart
                   </Button>
+          }
                 </div>
               </Col>
             </Row>

@@ -12,9 +12,9 @@ function Landingpage() {
       <div className="container-fluid p-0">
         <Carousel fade interval={3000}>
           <Carousel.Item>
-            <img
-              src="https://img.freepik.com/premium-photo/3d-render-smartphone-shopping-cart-isolated-blue-background-banner_387680-873.jpg"
-              alt="Online Shopping"
+          <img
+              src="https://img.lovepik.com/back_pic/05/71/77/565baef950a0664.jpg"
+              alt="Fast Delivery"
               className="d-block w-100"
               style={{ height: "500px", objectFit: "cover" }}
             />
@@ -36,14 +36,14 @@ function Landingpage() {
               <p>Exclusive offers just for you</p>
             </Carousel.Caption>
           </Carousel.Item>
-
-          <Carousel.Item>
-            <img
-              src="https://img.lovepik.com/back_pic/05/71/77/565baef950a0664.jpg"
-              alt="Fast Delivery"
+  <img
+              src="https://img.freepik.com/premium-photo/3d-render-smartphone-shopping-cart-isolated-blue-background-banner_387680-873.jpg"
+              alt="Online Shopping"
               className="d-block w-100"
               style={{ height: "500px", objectFit: "cover" }}
-            />
+            /> 
+          <Carousel.Item>
+           
             <Carousel.Caption>
               <h2>Fast Delivery</h2>
               <p>Quick & reliable doorstep delivery</p>

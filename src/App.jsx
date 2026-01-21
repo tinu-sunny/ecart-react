@@ -7,6 +7,7 @@ import ViewProuduct from './pages/ViewProuduct'
 import Pnf from './pages/Pnf'
 import Wishlist from './pages/Wishlist'
 import Cart from './pages/Cart'
+import OrderPlaced from './pages/OrderPlaced'
 
 function App() {
   
@@ -19,6 +20,7 @@ function App() {
       <Route path='/viewprouduct/:id' element={<ViewProuduct/>}/>
       <Route path='/wishlist' element={<Wishlist/>}/>
       <Route path='/cart' element={<Cart/>}/>
+      <Route path='/checkout' element={<OrderPlaced/>}/>
       <Route path='*' element={<Pnf/>}/>
     </Routes>
     </>

@@ -6,16 +6,22 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { FaHeart, FaTrash } from "react-icons/fa";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addtocart } from "../redux/slices/cartSlice";
+import { deleteitem } from "../redux/slices/wishlistSlice";
 
 function Wishlist() {
   // Temporary wishlist data (later connect to Context / Redux / Backend)
- const wishlist=useSelector((state)=>state.Wishlist.items)
- console.log(wishlist);
- 
+ const wishlistArray=useSelector((state)=>state.Wishlist.items)
+//  console.log(wishlist);
+ const dispatch = useDispatch()
+  
+ const [wishlist,setWishlist]=useState([])
 
-
+ useEffect(()=>{
+  setWishlist(wishlistArray)
+ },[wishlistArray])
 
   return (
     <>
@@ -26,7 +32,7 @@ function Wishlist() {
           <FaHeart className="text-danger" /> My Wishlist
         </h2>
 
-        {wishlist.length > 0 ? (
+        { wishlist.length > 0 ? (
           <Row>
             {wishlist.map((item) => (
               <Col md={4} key={item.id} className="mb-4">
@@ -44,12 +50,12 @@ function Wishlist() {
                     </Card.Text>
 
                     <div className="mt-auto d-flex gap-2">
-                      <Button variant="dark">
+                      <Button variant="dark" onClick={()=>dispatch(addtocart(item))}>
                         Add to Cart
                       </Button>
                       <Button
                         variant="outline-danger"
-                        onClick={() => removeFromWishlist(item.id)}
+                        onClick={()=>dispatch(deleteitem(item.id))}
                       >
                         <FaTrash />
                       </Button>

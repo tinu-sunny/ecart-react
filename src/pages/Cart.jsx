@@ -6,14 +6,22 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
 import { FaTrash, FaPlus, FaMinus } from "react-icons/fa";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { decrementqty, incrementqty, removeitem } from "../redux/slices/cartSlice";
+import { Link } from "react-router-dom";
 
 function Cart() {
-
-
- const cart=useSelector((state)=>state.cart.items)
+const [cart,setCart]=useState([])
+const dispatch = useDispatch()
+ const cartArray=useSelector((state)=>state.cart.items)
  console.log(cart);
+
+ useEffect(()=>{
+  setCart(cartArray)
+ },[cartArray])
+
+ 
  
 
 
@@ -45,42 +53,42 @@ function Cart() {
                         </Col>
 
                         <Col md={3}>
-                          <h6>{item.title}</h6>
-                          <p className="fw-bold mb-0">₹ {item.price}</p>
+                          <h6 className="mb-4">{item.title}</h6>
+                        
                         </Col>
 
-                        {/* <Col md={3} className="d-flex align-items-center gap-2">
+                        <Col md={3} className="d-flex align-items-center gap-2 mb-4">
                           <Button
                             size="sm"
                             variant="outline-dark"
-                         
+                         onClick={()=>{dispatch(decrementqty(item))}}
                           >
                             <FaMinus />
                           </Button>
 
                           <span className="fw-bold">
-                            {item.quantity}
+                            {item.qty}
                           </span>
 
                           <Button
                             size="sm"
                             variant="outline-dark"
-                         
+                         onClick={()=>{dispatch(incrementqty(item))}}
                           >
                             <FaPlus />
                           </Button>
-                        </Col> */}
+                        </Col>
 
-                        {/* <Col md={2}>
+                        <Col md={2}>
                           <p className="fw-bold mb-0">
-                            ₹ {item.price * item.quantity}
+                            ₹ {Math.floor(item.totalp)}
                           </p>
-                        </Col> */}
+                        </Col>
 
                         <Col md={6} className="text-end">
                           <Button
                             variant="outline-danger"
-                          
+                          onClick={()=>{dispatch(removeitem(item.id))}}
                           >
                             <FaTrash />
                           </Button>
@@ -95,10 +103,14 @@ function Cart() {
             {/* Cart Summary */}
             <Card className="mt-4 shadow-sm">
               <Card.Body className="d-flex justify-content-between align-items-center">
-                <h5>Total: ₹</h5>
-                <Button variant="dark">
-                  Proceed to Checkout
-                </Button>
+                <h5>Total: ₹ {cart && cart.length > 0
+  ? cart.reduce((sum, item) =>Math.floor( sum + item.totalp), 0)
+  : "0"}</h5>
+                <Link to={'/checkout'}>
+                  <Button variant="dark">
+                    Proceed to Checkout
+                  </Button>
+                </Link>
               </Card.Body>
             </Card>
           </>
